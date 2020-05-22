@@ -36,7 +36,6 @@ class Order(models.Model):
         PROCESSED = "PROCESSED", _("ОБРАБОТАН")
 
     id = models.AutoField(primary_key=True)
-    slug = models.SlugField(max_length=150, unique=True, blank=True)
     message = models.TextField(max_length=200, blank=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, blank=True, null=True)
     status = models.CharField(max_length=10, choices=OrderStatus.choices, default=OrderStatus.PENDING)
