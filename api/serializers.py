@@ -14,4 +14,5 @@ class OrderSerializer(serializers.ModelSerializer):
             'phone_number',
             'address',
             'customer_name',
+            'price',
         )
