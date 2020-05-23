@@ -42,5 +42,6 @@ class Order(models.Model):
     phone_number = models.CharField(max_length=13)
     address = models.CharField(max_length=100)
     customer_name = models.CharField(max_length=50)
+     = models.IntegerField()
 
 
