@@ -18,9 +18,11 @@ from django.urls import path
 from django.urls import include
 
 import api.urls
+from .views import index
 
 urlpatterns = [
     path('jet/', include('jet.urls', 'jet')),
     path('admin/', admin.site.urls),
-    path('api/', include(api.urls))
+    path('api/', include(api.urls)),
+    path('', index, name="main")
 ]
