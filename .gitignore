@@ -130,3 +130,7 @@ dmypy.json
 .pyre/
 .idea
 .DS_store
+# Redis
+dump.rdb
+#Directories
+uploads/
