@@ -162,10 +162,8 @@ button:focus{
 }
 
 .top-navbar .navbar{
-	padding: 15px 0px;
 	position: fixed;
 	width: 100%;
-	border-radius: 0px 0px 100px 100px;
 	transition: height .3s ease-out, background .3s ease-out, box-shadow .3s ease-out;
 	-webkit-transform: translate3d(0, 0, 0);
 	transform: translate3d(0, 0, 0);
@@ -183,7 +181,6 @@ button:focus{
 }
 
 .top-navbar .navbar-light .navbar-nav .nav-item .nav-link:hover{
-	background: #d65106;
 	color: #ffffff;
 }
 .top-navbar .navbar-light .navbar-nav .nav-item.active .nav-link{
@@ -385,9 +382,13 @@ button:focus{
 -------------------------------------------------------------------*/
 
 .menu-box{
-	padding: 70px 0px;
+	padding: 120px 0px;
 }
 
+.btn-delete{
+    float: right;
+    padding: 1px 8px;
+}
 .heading-title{
 	margin-bottom: 50px;
 }
@@ -954,7 +955,6 @@ button:focus{
 }
 .btn.btn-common:hover{
 	color: #ffffff;
-	background-color: #333333;
 	border-color: #333333;
 }
 .blog-box{
@@ -1209,7 +1209,6 @@ blockquote {
 }
 .btn-submit:hover{
 	color: #ffffff;
-	background-color: #333333;
 	border-color: #333333;
 }
 

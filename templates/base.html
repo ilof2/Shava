@@ -53,5 +53,66 @@
 	<script src="{% static 'js/form-validator.min.js' %}"></script>
     <script src="{% static 'js/contact-form-script.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
+    <script type="text/javascript">
+        var subTotal = 0;
+        var quantity = 0;
+        cartLonelyText();
+        updateCart();
+        $('#card').on('shown.bs.modal', function () {
+            cartLonelyText();
+            updateCart();
+            $('#myInput').trigger('focus');
+        })
+
+        $('#exampleModal').on('shown.bs.modal', function () {
+            $('#myInput').trigger('focus');
+        })
+
+        $('.buttonAdd').click(function (action) {
+            prod_id = parseInt(this.parentElement.firstElementChild.textContent);
+            prod_name = this.parentElement.getElementsByClassName("product-name")[0].textContent;
+            price = parseInt(this.parentElement.getElementsByClassName("product-price")[0].textContent);
+            console.log($("#sumPrice"));
+            current_price = parseInt($("#sumPrice").text());
+            $("#sumPrice").text(current_price + price);
+            addToCart(prod_name, price);
+
+        })
+        function addToCart(name, price) {
+            if (quantity === 0) $('#productsList').text(" ");
+            let newDiv = $('<div class="cart-item"></div>');
+            newDiv.text(name + ' .................... ' + price + ' ');
+            newDiv.append('<button class="btn btn-danger btn-sm btn-delete" onclick="deleteItem(this)">X</button>');
+            newDiv.append('<hr>');
+            newDiv.attr('name', name);
+	        newDiv.attr('price', price);
+            $('#productsList').append(newDiv);
+            subTotal += price;
+            quantity++;
+            updateCart();
+        }
+        function deleteItem(e) {
+            let price = $(e.parentElement).attr('price');
+            subTotal -= price;
+            $(e.parentElement).remove();
+            quantity--;
+            updateCart()
+        }
+        function updateCart() {
+            $("#sumPrice").text(subTotal);
+            $("#quantity").text(quantity);
+            if($("#sumPrice").text() === "0"){
+                document.getElementById("orderButton").style.display = "none";
+            }else{
+              document.getElementById("orderButton").style.display = "";
+            }
+            cartLonelyText();
+        }
+
+        function cartLonelyText() {
+	        if (quantity === 0)
+		    $('#productsList').text('В корзине сейчас пусто, добавь что-нибудь');
+        }
+    </script>
 </body>
 </html>
