@@ -13,6 +13,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_editable = ('name', 'price')
     search_fields = ('name',)
     readonly_fields = ('id', )
+    list_filter = ('name', 'price', 'category')
 
 
 @admin.register(Category)
@@ -21,6 +22,7 @@ class CategoryAdmin(admin.ModelAdmin):
     list_editable = ('name', )
     search_fields = ('name', )
     readonly_fields = ('id',)
+    list_filter = ('name',)
 
 
 @admin.register(Order)
@@ -29,3 +31,4 @@ class OrderAdmin(admin.ModelAdmin):
     list_editable = ('status',)
     search_fields = ('customer_name', 'phone_number')
     readonly_fields = ('id',)
+    list_filter = ('status', 'phone_number')
