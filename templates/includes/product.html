@@ -1,0 +1,11 @@
+<div class="col-lg-4 col-md-6 special-grid">
+    <div class="gallery-single fix" style="background-image: url('{{ product.image.url }}'); background-size: cover; height: 250px; width: 250px;">
+        <div class="why-text">
+            <span hidden="true" class="product-id">{{product.id}}</span>
+            <h4 class="product-name">{{ product.name }}</h4>
+            <p class="product-desc">{{ product.description }}</p>
+            <h5><span class="product-price">{{ product.price }}</span> р.</h5>
+            <button type="button" class="btn-group btn-group-sm buttonAdd" data-toggle="modal" data-whatever="@card">Добавить</button>
+        </div>
+    </div>
+</div>

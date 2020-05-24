@@ -1,0 +1,118 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en"><!-- Basic -->
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+     <!-- Site Metas -->
+    <title>Platform 1 - {% block title %}{% endblock %}</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <!-- Site Icons -->
+    <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+	<!-- Site CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Responsive CSS -->
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+    {% block content %}
+    {% endblock %}
+	<a href="#" id="back-to-top" title="Back to top" style="display: none;"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></a>
+
+	<!-- ALL JS FILES -->
+	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'js/popper.min.js' %}"></script>
+	<script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- ALL PLUGINS -->
+	<script src="{% static 'js/jquery.superslides.min.js' %}"></script>
+	<script src="{% static 'js/images-loded.min.js' %}"></script>
+	<script src="{% static 'js/isotope.min.js' %}"></script>
+	<script src="{% static 'js/baguetteBox.min.js' %}"></script>
+	<script src="{% static 'js/form-validator.min.js' %}"></script>
+    <script src="{% static 'js/contact-form-script.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+    <script type="text/javascript">
+        var subTotal = 0;
+        var quantity = 0;
+        cartLonelyText();
+        updateCart();
+        $('#card').on('shown.bs.modal', function () {
+            cartLonelyText();
+            updateCart();
+            $('#myInput').trigger('focus');
+        })
+
+        $('#exampleModal').on('shown.bs.modal', function () {
+            $('#myInput').trigger('focus');
+        })
+
+        $('.buttonAdd').click(function (action) {
+            prod_id = parseInt(this.parentElement.firstElementChild.textContent);
+            prod_name = this.parentElement.getElementsByClassName("product-name")[0].textContent;
+            price = parseInt(this.parentElement.getElementsByClassName("product-price")[0].textContent);
+            console.log($("#sumPrice"));
+            current_price = parseInt($("#sumPrice").text());
+            $("#sumPrice").text(current_price + price);
+            addToCart(prod_name, price);
+
+        })
+        function addToCart(name, price) {
+            if (quantity === 0) $('#productsList').text(" ");
+            let newDiv = $('<div class="cart-item"></div>');
+            newDiv.text(name + ' .................... ' + price + ' ');
+            newDiv.append('<button class="btn btn-danger btn-sm btn-delete" onclick="deleteItem(this)">X</button>');
+            newDiv.append('<hr>');
+            newDiv.attr('name', name);
+	        newDiv.attr('price', price);
+            $('#productsList').append(newDiv);
+            subTotal += price;
+            quantity++;
+            updateCart();
+        }
+        function deleteItem(e) {
+            let price = $(e.parentElement).attr('price');
+            subTotal -= price;
+            $(e.parentElement).remove();
+            quantity--;
+            updateCart()
+        }
+        function updateCart() {
+            $("#sumPrice").text(subTotal);
+            $("#quantity").text(quantity);
+            if($("#sumPrice").text() === "0"){
+                document.getElementById("orderButton").style.display = "none";
+            }else{
+              document.getElementById("orderButton").style.display = "";
+            }
+            cartLonelyText();
+        }
+
+        function cartLonelyText() {
+	        if (quantity === 0)
+		    $('#productsList').text('В корзине сейчас пусто, добавь что-нибудь');
+        }
+    </script>
+</body>
+</html>

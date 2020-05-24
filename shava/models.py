@@ -1,3 +1,4 @@
+from PIL import Image
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.dispatch import receiver
@@ -25,7 +26,7 @@ class Product(models.Model):
     name = models.CharField(max_length=50, unique=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True)
     description = models.TextField(max_length=200, blank=True)
-    image = models.ImageField(upload_to='uploads/', height_field=None, width_field=None)
+    image = models.ImageField(height_field=None, width_field=None)
     price = models.IntegerField(default=0)
 
     class Meta:

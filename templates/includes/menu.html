@@ -1,0 +1,50 @@
+{% load static %}
+<div class="menu-box" id="menu" xmlns:heigth="http://www.w3.org/1999/xhtml" xmlns:width="http://www.w3.org/1999/xhtml"
+	 xmlns:background-size="http://www.w3.org/1999/xhtml" xmlns:background-image="http://www.w3.org/1999/xhtml">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="heading-title text-center">
+						<h2>Меню</h2>
+						<p>Просто добавь в корзину</p>
+					</div>
+				</div>
+			</div>
+
+			<div class="row inner-menu-box">
+				<div class="col-3">
+					<div class="nav flex-column nav-pills" id="v-pills-tab" role="tablists" aria-orientation="vertical">
+						<a class="nav-link active" id="all-products-tab" data-toggle="pill" href="#all-products" role="tab" aria-controls="v-pills-home" aria-selected="true">Все</a>
+						{% for category in categories %}
+                            <a class="nav-link" id="{{ category.name }}-tab" data-toggle="pill" href="#{{ category.name }}" role="tab" aria-controls="{{ category.name }}" aria-selected="false">{{ category.name }}</a>
+						{% endfor %}
+					</div>
+				</div>
+
+				<div class="col-9">
+					<div class="tab-content" id="v-pills-tabContenst">
+						<div class="tab-pane fade show active" id="all-products" role="tabpanel" aria-labelledby="all-products-tab">
+                            <div class="row">
+                                {% for product in products %}
+									{% include 'includes/product.html' %}
+                                {% endfor %}
+
+                            </div>
+						</div>
+						{% for category in categories %}
+						<div class="tab-pane fade" id="{{ category.name }}" role="tabpanel" aria-labelledby="{{ category.name }}-tab">
+							<div class="row">
+								{% for product in products %}
+									{% if product.category == category %}
+										{% include 'includes/product.html' %}
+									{% endif %}
+								{% endfor %}
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- End Menu -->
