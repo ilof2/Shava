@@ -9,7 +9,6 @@ class Category(models.Model):
 
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50, unique=True)
-    slug = models.SlugField(max_length=150, unique=True, blank=True)
 
     class Meta:
         default_related_name = 'category'
@@ -24,7 +23,6 @@ class Product(models.Model):
 
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=50, unique=True)
-    slug = models.SlugField(max_length=150, unique=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True)
     description = models.TextField(max_length=200, blank=True)
     image = models.ImageField(upload_to='uploads/', height_field=None, width_field=None)
