@@ -65,7 +65,6 @@ def email_sending_order(sender, instance, **kwargs):
     for product in instance.product.all():
         products.append(product.name)
     if products:
-        print(products)
         text = f'Заказ:\nИмя заказчика: {instance.customer_name}\n' \
                f'Номер заказчика: {instance.phone_number}\n' \
                f'Адресс: {instance.address}\n' \
