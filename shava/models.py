@@ -27,7 +27,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True)
     description = models.TextField(max_length=200, blank=True)
     image = models.ImageField(height_field=None, width_field=None)
-    price = models.IntegerField(default=0)
+    price = models.DecimalField(max_digits=12, decimal_places=2)
 
     class Meta:
         default_related_name = 'product'
@@ -51,7 +51,7 @@ class Order(models.Model):
     phone_number = models.CharField(max_length=13)
     address = models.CharField(max_length=100)
     customer_name = models.CharField(max_length=50)
-    price = models.IntegerField(default=0)
+    price = models.DecimalField(max_digits=12, decimal_places=2)
 
     def __str__(self):
         return self.customer_name
