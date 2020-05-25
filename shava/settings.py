@@ -149,3 +149,6 @@ STATICFILES_DIRS = [
 ]
 MEDIA_URL = '/uploads/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+
+CHAT_ID = os.environ.get('CHAT_ID')
+BOT_TOKEN = os.environ.get('TOKEN')
