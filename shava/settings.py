@@ -152,3 +152,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 
 CHAT_ID = os.environ.get('CHAT_ID')
 BOT_TOKEN = os.environ.get('TOKEN')
+
+JET_SIDE_MENU_CUSTOM_APPS = [
+    ('shava', [
+        'Order',
+        'Category',
+        'Product',
+    ]),
+]
