@@ -17,10 +17,17 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
+from django.contrib.auth.models import User, Group
+from rest_framework.authtoken.models import Token
 
 import api.urls
 from shava import settings
 from .views import index
+
+
+admin.site.unregister(Group)
+admin.site.unregister(User)
+admin.site.unregister(Token)
 
 urlpatterns = [
     path('jet/', include('jet.urls', 'jet')),
