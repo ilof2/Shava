@@ -54,12 +54,39 @@
     <script src="{% static 'js/contact-form-script.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
     <script type="text/javascript">
-        var subTotal = 0;
-        var quantity = 0;
-        cartLonelyText();
-        updateCart();
+        var products = {};
+        function minusCountCart(e){
+            var $input = $(e.parentElement).find('.input-count');
+            var count = parseInt($input.text());
+            count = count < 2 || isNaN(count) ? 1 : count - 1;
+            prod_id = $(e.parentElement.parentElement).attr("prod_id");
+            products[prod_id]["count"] = count;
+            updateCart()
+
+        };
+        function plusCountCart(e){
+            var $input = $(e.parentElement).find('.input-count');
+            var count = parseInt($input.text());
+            count = count < 1 || isNaN(count) ? 1 : count + 1;
+            prod_id = $(e.parentElement.parentElement).attr("prod_id");
+            products[prod_id]["count"] = count;
+            updateCart()
+        };
+        function minusCount(e){
+            var $input = $(e.parentElement).find('.input-count');
+            var count = parseInt($input.text());
+
+            count = count < 2 || isNaN(count) ? 1 : count - 1;
+            $input.text(count);
+            $(e.parentElement).attr("count", count)
+        };
+        function plusCount(e){
+            var $input = $(e.parentElement).find('.input-count');
+            var count = parseInt($input.text());
+            count = count < 1 || isNaN(count) ? 1 : count + 1;
+            $input.text(count);
+        };
         $('#card').on('shown.bs.modal', function () {
-            cartLonelyText();
             updateCart();
             $('#myInput').trigger('focus');
         })
@@ -69,50 +96,117 @@
         })
 
         $('.buttonAdd').click(function (action) {
-            prod_id = parseInt(this.parentElement.firstElementChild.textContent);
-            prod_name = this.parentElement.getElementsByClassName("product-name")[0].textContent;
-            price = parseInt(this.parentElement.getElementsByClassName("product-price")[0].textContent);
-            console.log($("#sumPrice"));
+            prod_id = parseInt(this.parentElement.parentElement.firstElementChild.textContent);
+            prod_name = this.parentElement.parentElement.getElementsByClassName("product-name")[0].textContent;
+            price = parseInt(this.parentElement.parentElement.getElementsByClassName("product-price")[0].textContent);
             current_price = parseInt($("#sumPrice").text());
             $("#sumPrice").text(current_price + price);
-            addToCart(prod_name, price);
-
+            var $input = $(this).parent().find('.input-count')
+            var count = parseInt($input.text())
+            addToCart(prod_id, prod_name, price, count);
         })
-        function addToCart(name, price) {
-            if (quantity === 0) $('#productsList').text(" ");
-            let newDiv = $('<div class="cart-item"></div>');
-            newDiv.text(name + ' .................... ' + price + ' ');
-            newDiv.append('<button class="btn btn-danger btn-sm btn-delete" onclick="deleteItem(this)">X</button>');
-            newDiv.append('<hr>');
-            newDiv.attr('name', name);
-	        newDiv.attr('price', price);
-            $('#productsList').append(newDiv);
-            subTotal += price;
-            quantity++;
+        updateCart()
+        function addToCart(prod_id, name, price, count) {
+            if(products[prod_id] != undefined){
+                products[prod_id]["count"] += count
+            }
+            else{
+                products[prod_id] = {
+                                "id": prod_id,
+                                "count": count,
+                                "name": name,
+                                "price": price
+                                }
+                        }
             updateCart();
         }
         function deleteItem(e) {
-            let price = $(e.parentElement).attr('price');
-            subTotal -= price;
-            $(e.parentElement).remove();
-            quantity--;
+            let price = $(e.parentElement.parentElement).attr('price');
+            let count = $(e.parentElement.parentElement).attr('count');
+            let prod_id = $(e.parentElement.parentElement).attr('prod_id');
+            delete products[prod_id];
             updateCart()
         }
         function updateCart() {
-            $("#sumPrice").text(subTotal);
-            $("#quantity").text(quantity);
+            $('#productsList').html('')
+            sum_count = 0;
+            sum_price = 0;
+            for (let [key, value] of Object.entries(products)){
+                let newDiv = $('<div class="cart-item"></div>');
+                sum_price += products[key]['price'] * products[key]['count']
+                sum_count += products[key]['count']
+                let delButton = $('<p class="delPar"><button class="btn-delete" onclick="deleteItem(this)">Удалить</button></p>')
+                newDiv.append(`<h4 style="display: inline">${products[key]["name"]}</h4>`);
+                newDiv.attr('name', products[key]['name']);
+                newDiv.attr('price', products[key]['price']);
+                newDiv.attr('prod_id', products[key]["id"]);
+                newDiv.attr('count', products[key]["count"]);
+                counter_div = $('<div class="counter"></div>');
+                counter_div.append('<button class="minus" style="color: black" onclick="minusCountCart(this)">-</button>');
+                counter_div.append(`<span class="input-count" style="background: none; border: 0">${products[key]["count"]}</span>`);
+                counter_div.append('<button class="plus" style="color: black" onclick="plusCountCart(this)">+</button>');
+                newDiv.append(counter_div)
+                newDiv.append(delButton)
+                $('#productsList').append(newDiv);
+            }
             if($("#sumPrice").text() === "0"){
                 document.getElementById("orderButton").style.display = "none";
             }else{
               document.getElementById("orderButton").style.display = "";
             }
-            cartLonelyText();
-        }
+            $("#sumPrice").text(sum_price);
+            $("#quantity").text(sum_count);
 
-        function cartLonelyText() {
-	        if (quantity === 0)
-		    $('#productsList').text('В корзине сейчас пусто, добавь что-нибудь');
         }
+        function getProperty(o, prop) {
+            if (o[prop] !== undefined) return o[prop];
+            else return 0;
+        }
+        function sendForm(e){
+            data = {}
+            phone = $("#phone-text").val();
+            name = $("#recipient-name").val();
+            address = $("#address-text").val();
+            message = $("#message-text").val();
+            data["phone"] = phone;
+            data["name"] = name;
+            data["address"] = address;
+            data["message"] = message;
+            data["products"] = JSON.stringify(products);
+            $.ajax({
+                  type: "POST",
+                  url: "http://localhost:8000/api/order/create/",
+                  data: data,
+                  success: success,
+                  dataType: "json"
+            });
+        }
+        function success(data, textStatus){
+            alert("YES!")
+        }
+        $.ajaxSetup({
+             beforeSend: function(xhr, settings) {
+                 function getCookie(name) {
+                     var cookieValue = null;
+                     if (document.cookie && document.cookie != '') {
+                         var cookies = document.cookie.split(';');
+                         for (var i = 0; i < cookies.length; i++) {
+                             var cookie = jQuery.trim(cookies[i]);
+                             // Does this cookie string begin with the name we want?
+                             if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                                 cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                 break;
+                             }
+                         }
+                     }
+                     return cookieValue;
+                 }
+                 if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                     // Only send the token to relative URLs i.e. locally.
+                     xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+                 }
+             }
+        });
     </script>
 </body>
 </html>

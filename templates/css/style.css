@@ -386,11 +386,45 @@ button:focus{
 }
 
 .btn-delete{
+    background: none;
+    border: 0;
+    float: left;
+    padding: 0;
+}
+.cart-item {
+    padding: 10px 10px;
+    margin: 7px 0px;
+    background-color: aliceblue;
+}
+
+.minus {
+    border-radius: 100%;
+    padding: 0px 9px 0px 9px;
+    margin-right: 2px;
+}
+.plus {
+    border-radius: 100%;
+    padding: 0px 9px 0px 9px;
+    margin-left: 3px;
+
+}
+
+.counter{
+    display: inline;
     float: right;
-    padding: 1px 8px;
+    margin: 7px;
+}
+
+.nav-btn{
+    color: white;
+    background-color: #d65106;
 }
 .heading-title{
 	margin-bottom: 50px;
+}
+input {
+    background: transparent;
+    text-align: center;
 }
 .heading-title h2{
 	color: #010101;
@@ -433,7 +467,7 @@ button:focus{
     bottom: -100%;
     right: 0;
     height: 100%;
-    background: rgba(207, 166, 113, 0.9);
+    background: rgba(250, 165, 11, 0.8);
     padding: 12px 12px;
     -webkit-transition: all .3s ease;
     transition: all .3s ease;

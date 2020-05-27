@@ -5,7 +5,14 @@
             <h4 class="product-name">{{ product.name }}</h4>
             <p class="product-desc">{{ product.description }}</p>
             <h5><span class="product-price">{{ product.price }}</span> р.</h5>
-            <button type="button" class="btn-group btn-group-sm buttonAdd" data-toggle="modal" data-whatever="@card">Добавить</button>
+            <div class="number">
+                <button type="button" class="btn-group btn-group-sm buttonAdd" data-toggle="modal" data-whatever="@card" style="margin-right: 40px">
+                    Добавить
+                </button>
+                <button class="minus" style="color: black" onclick="minusCount(this)">-</button>
+                <span class="input-count" style="background: none; color: white; border: 0">1</span>
+                <button class="plus" style="color: black" onclick="plusCount(this)">+</button>
+            </div>
         </div>
     </div>
 </div>
