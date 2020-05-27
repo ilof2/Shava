@@ -2,6 +2,8 @@ from .celery import app
 import requests
 from .settings import CHAT_ID, BOT_TOKEN
 from .models import Order
+from django.utils import timezone
+from .settings import ORDER_LIVING_TIME
 
 
 @app.task
@@ -24,4 +26,16 @@ def send_message_order():
             requests.post(BOT_TOKEN + 'sendMessage', data=params)
             order.is_sended = True
             order.save()
+
+
+@app.task
+def delete_not_sended_orders():
+    not_sended_orders = Order.objects.filter(is_sended=False)
+    for order in not_sended_orders:
+        delta = (timezone.now() - order.created_at).seconds
+        if delta > ORDER_LIVING_TIME:
+            order.delete()
+
+
+
 
