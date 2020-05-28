@@ -406,7 +406,9 @@ button:focus{
     border-radius: 100%;
     padding: 0px 9px 0px 9px;
     margin-left: 3px;
-
+}
+.text-error {
+    color: red;
 }
 
 .counter{
@@ -608,7 +610,6 @@ input {
 .contact-imfo-box{
 	background: #d65106;
 	padding: 30px 0;
-	border-radius: 100px;
 }
 
 .overflow-hidden {

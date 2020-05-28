@@ -55,6 +55,7 @@
     <script src="{% static 'js/custom.js' %}"></script>
     <script type="text/javascript">
         var products = {};
+        updateCart();
         function minusCountCart(e){
             var $input = $(e.parentElement).find('.input-count');
             var count = parseInt($input.text());
@@ -162,24 +163,6 @@
             if (o[prop] !== undefined) return o[prop];
             else return 0;
         }
-        function sendForm(e){
-            data = {}
-            phone = $("#phone-text").val();
-            name = $("#recipient-name").val();
-            address = $("#address-text").val();
-            message = $("#message-text").val();
-            data["phone"] = phone;
-            data["name"] = name;
-            data["address"] = address;
-            data["message"] = message;
-            data["products"] = JSON.stringify(products);
-            $.ajax({
-                  type: "POST",
-                  url: "http://localhost:8000/api/order/create/",
-                  data: data,
-                  success: Success
-            });
-        }
         function Success(data, textStatus){
             products = {}
             alert("Ваш заказ принят, с вами свяжутся в скором времени!")
@@ -208,6 +191,75 @@
                  }
              }
         });
+        jQuery(function($) {
+          $('#submitBut').on('click', function(event) {
+            event.preventDefault(); // отменяем событие по умолчанию
+            if ( validateForm() ) { // если есть ошибки возвращает true
+              return false; // прерываем выполнение скрипта
+            }
+            data = {}
+            phone = $("#phone-text").val();
+            name = $("#recipient-name").val();
+            address = $("#address-text").val();
+            message = $("#message-text").val();
+            data["phone"] = phone;
+            data["name"] = name;
+            data["address"] = address;
+            data["message"] = message;
+            data["products"] = JSON.stringify(products);
+
+            $.ajax({
+                  type: "POST",
+                  url: "http://localhost:8000/api/order/create/",
+                  data: data,
+                  success: Success,
+                  error: function (error) {
+                    products = {}
+                    alert("Что-то пошло не так!")
+                    updateCart()
+                   }
+            });
+          });
+
+          function validateForm() {
+            $(".text-error").remove();
+
+            // Name validation
+            var el_l    = $("#recipient-name");
+            if ( el_l.val().length < 2 ) {
+              var v_login = true;
+              el_l.after('<span class="for-login text-error">Введите пожалуйста имя</span>');
+              $(".for-login").css({top: el_l.position().top + el_l.outerHeight() + 2});
+            }
+            $("#recipient-name").toggleClass('error', v_login );
+
+            // Phone validation
+            var reg = /\b(\+?(375)?(17|25|29|33|44)[0-9]{7})\b|\b(80(17|25|29|33|44)[0-9]{7})\b/;
+            var el_phone = $("#phone-text");
+            if (!reg.test(el_phone.val() )){
+              var v_phone = true;
+              el_phone.after('<span class="for-phone text-error">Номер введен не корректно</span>');
+              $(".for-phone").css({top: el_phone.position().top + el_phone.outerHeight() + 2});
+            }
+
+            // Address validation
+            var el_address = $("#address-text");
+            if (el_address.val().length < 5){
+              var v_address = true;
+              el_address.after('<span class="for-address text-error">Напишите адрес более подробно</span>');
+              $(".for-address").css({top: el_address.position().top + el_address.outerHeight() + 2});
+            }
+            var el_message = $("#message-text");
+            if ( el_message.val().length > 200 ) {
+              var v_message = true;
+              el_message.after('<span class="for-message text-error">Сообщение слишком длинное, допустимая длинна меньше 200 символов</span>');
+              $(".for-message").css({top: el_message.position().top + el_message.outerHeight() + 2});
+            }
+            return ( v_login || v_phone || v_address || v_message);
+          }
+
+        });
+
     </script>
 </body>
 </html>
