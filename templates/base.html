@@ -177,12 +177,13 @@
                   type: "POST",
                   url: "http://localhost:8000/api/order/create/",
                   data: data,
-                  success: success,
-                  dataType: "json"
+                  success: Success
             });
         }
-        function success(data, textStatus){
-            alert("YES!")
+        function Success(data, textStatus){
+            products = {}
+            alert("Ваш заказ принят, с вами свяжутся в скором времени!")
+            updateCart()
         }
         $.ajaxSetup({
              beforeSend: function(xhr, settings) {
