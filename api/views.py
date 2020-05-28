@@ -19,8 +19,9 @@ class CreateOrder(APIView):
         products_data = json.loads(request.data.get("products", '{}'))
         product_ids = products_data.keys()
         product_objs = Product.objects.filter(id__in=product_ids)
-
-        order = Order(address=address, message=message, phone_number=phone, customer_name=name, price=24)
+        order = Order(address=address, message=message, phone_number=phone, customer_name=name, price=0)
+        for prod in products_data.values():
+            order.price = order.price + (prod.get("price", 0) * prod.get("count"))
         order.save()
         for prod in product_objs:
             order.product.add(prod)
