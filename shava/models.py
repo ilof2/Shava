@@ -45,20 +45,21 @@ class Order(models.Model):
 
     id = models.AutoField(primary_key=True,)
     message = models.TextField(max_length=200, blank=True, verbose_name="Коментарий к заказу")
-    is_sended = models.BooleanField(default=False)
+    is_sended = models.BooleanField(default=False, verbose_name='Уведомление отправлено')
     product = models.ManyToManyField('Product', related_name='orders', verbose_name="Товара")
     status = models.CharField(max_length=10, choices=OrderStatus.choices, default=OrderStatus.PENDING, verbose_name="Статус заказа")
     phone_number = models.CharField(max_length=13, verbose_name="Телефон")
     address = models.CharField(max_length=100, verbose_name="Адресс")
     customer_name = models.CharField(max_length=50, verbose_name="Имя клиента")
     price = models.DecimalField(max_digits=12, decimal_places=2, verbose_name="Цена")
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата Заказа')
 
     def product_list(self):
         product_list = ''
         for product in OrderProductCount.objects.filter(order__pk=self.pk):
             product_list = f"</br>{product_list} <p>{product.product.name}: {product.count}</p>"
         return format_html(product_list)
+    product_list.short_description = 'Список продуктов'
 
     def get_products_for_message(self):
         product_list = ''

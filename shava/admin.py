@@ -32,8 +32,3 @@ class OrderAdmin(admin.ModelAdmin):
     search_fields = ('customer_name', 'phone_number')
     readonly_fields = ('id', 'product_list', 'created_at')
     list_filter = ('status', 'phone_number')
-
-
-@admin.register(OrderProductCount)
-class OrderPoductCountAdmin(admin.ModelAdmin):
-    list_display = ('id', 'order', 'product', 'count')
