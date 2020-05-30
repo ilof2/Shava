@@ -13,7 +13,7 @@ class CreateOrder(APIView):
     def post(self, request):
         data = request.data
         response = validation(data)
-        if response.status_code != 200:
+        if response and response.status_code != 200:
             return response
         phone = data.get("phone")
         name = data.get("name")
@@ -47,8 +47,8 @@ class CreateOrder(APIView):
 
 
 def validation(data):
-    if data.get("phone") and data.get("name") and data.get("address") and data.get("message"):
+    if data.get("phone") and data.get("name") and data.get("address"):
         return
-    if len(data.get("message")) > 200:
+    if len(data.get("message", [])) > 200:
         return Response(status=400)
     return Response(status=400)
